@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} Enter Your Data! {% endblock %}
+{% block content %}
+<form action="#" method ="post">
+    <label for="weapon">Select weapon name:</label>
+    <select name="weapon">
+    {% for weap in weapons %}
+    <option value="{{weap}}"> {{weap}} </option>
+    {% endfor %}
+    </select>
+    <label for="refinementlvl">Enter weapon refinement:</label>
+    <select name="refinementlvl">
+        <option value=1> 1 </option>
+        <option value=2> 2 </option>
+        <option value=3> 3 </option>
+        <option value=4> 4 </option>
+        <option value=5> 5 </option>
+    </select>
+    <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
+
+{% block output %}
+<table>
+    <tr>
+        <th> id </th>
+        <th> weapon_name </th>
+        <th> refinement_lvl</th>
+    </tr>
+{% for row in output %}
+    <tr>
+    {% for col in row %}
+    <td> {{ row[col] }} </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
