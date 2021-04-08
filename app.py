@@ -18,8 +18,11 @@ def data():
         query = "SELECT * FROM " + tbl 
         cur.execute(query)
         output2 = cur.fetchall()
+        cols = []
+        for row in output2[0]:
+            cols.append(row)
         cur.close()
-        return render_template("data.html", output = output2)
+        return render_template("data.html", output = output2, columns = cols)
     return render_template("data.html", output = '')
 
 @app.route("/make_team")

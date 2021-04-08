@@ -14,10 +14,11 @@
 {% endblock %}
 
 {% block output %}
+
 <table>
     <tr>
-        {% for col in output[1] %}
-        <td> <h3> {{ col }}  </h3></td>
+        {% for i in columns %}
+        <td> <h3> {{ i }}  </h3></td>
         {% endfor %}
     </tr>
 {% for row in output %}
