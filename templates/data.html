@@ -15,6 +15,11 @@
 
 {% block output %}
 <table>
+    <tr>
+        {% for col in output[1] %}
+        <td> <h3> {{ col }}  </h3></td>
+        {% endfor %}
+    </tr>
 {% for row in output %}
     <tr>
     {% for col in row %}
