@@ -26,8 +26,12 @@ def data():
     else:
         return render_template("data.html", output = '')
 
-@app.route("/make_team", methods=['POST', 'GET'])
+@app.route("/make_team")
 def make_team():
+    return render_template("team.html")
+
+@app.route("/weapons", methods=['POST', 'GET'])
+def enter_weapons():
     # get weapon names
     cur = connection.cursor()
     cur.execute("SELECT weapon_name FROM gs_weapon")
@@ -59,10 +63,15 @@ def make_team():
         cur.execute("SELECT * FROM user_weapon")
         output5 = cur.fetchall()
         cur.close()
-        return render_template("team.html", 
-            weapons = gs_weaponnames, characters = gs_characternames, output = output5)
+        return render_template("weapons.html", 
+            weapons = gs_weaponnames, characters = gs_characternames, output = output5, proceed = True)
     else:
-        return render_template("team.html", weapons = gs_weaponnames, characters = gs_characternames, output = output4)
+        return render_template("weapons.html", 
+        weapons = gs_weaponnames, characters = gs_characternames, output = output4, proceed = False)
+
+@app.route("/characters", methods=['POST', 'GET'])
+def enter_characters():
+    return render_template("character.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
