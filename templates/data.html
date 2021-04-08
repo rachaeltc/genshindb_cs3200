@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} CS 3200 Project {% endblock %}
+{% block content %}
+<form action="#" method ="post">
+    <label for="table">Choose a table:</label>
+    <select name="table">
+        <option value="gs_character">Characters</option>
+        <option value="gs_weapon">Weapons</option>
+        <option value="gs_elemental_resonance">Elemental Resonance</option>
+        <option value="gs_recommended_party">Compatible Characters</option>
+    </select>
+    <input type="submit" value="submit"/>
+</form>
+{% endblock %}
+
+{% block output %}
+<table>
+{% for row in output %}
+    <tr>
+    {% for col in row %}
+    <td> {{ row[col] }} </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+></table>
+{% endblock %}

@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    background-color: #F1F1F1;
+    text-align: center;
+    padding: 10px;
+}
+
+.containerL {
+   text-align: center;
+   position: absolute;
+   left: 0%;
+   width: 50%;
+   padding: 10px;
+}
+
+.containerR {
+    position: absolute;
+    text-align: center;
+    right: 0%;
+    width: 50%;
+    padding: 10px;
+ }
+
+.footer {
+    background-color: #F1F1F1;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    bottom:0%;
+    width: 100%;
+  }
+
+.btn {
+    background:#95b7ed;
+    padding: 13px 25px;
+    text-decoration: none;
+    color: white;
+}

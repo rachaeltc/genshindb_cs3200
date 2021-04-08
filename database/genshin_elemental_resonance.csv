@@ -1,0 +1,8 @@
+Common Element,ResonanceType,Description
+Pyro,Fervent Flames,Affected by Cryo for 40% less time and increases attack by 25%
+Hydro,Soothing Water,Affected by Pyro for 40% less time. Increases incoming healing by 30%
+Anemo,Impetuous Winds,Decreases Stamina consumption by 15%. Increases movement speed by 10% and shortens skill cooldown by 5%
+Electro,High Voltage,"Affected by Hydro for 40% less time. Superconduct, Overloaded, and Electro-Charged have a 100% chance to generate an Electro Elemental Particle (with a five second cooldown)"
+Geo,Enduring Rock,"Increases resistance to interruption. When protected by a shield, increases attack damage by 15%"
+Cryo,Shattering Ice,Affected by Electro for 40% less time. Increases CRIT Rate against enemies that are Frozen or affected by Cryo by 15%
+,Protective Canopy,All elemental resistances and physical resistance increased by 15%
