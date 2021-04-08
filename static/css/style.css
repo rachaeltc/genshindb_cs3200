@@ -3,10 +3,22 @@ html, body {
     width: 100%;
 }
 
+.pagecontainer{
+    position: relative;
+    min-height: 100vh;
+}
+
 .header {
     background-color: #F1F1F1;
     text-align: center;
     padding: 10px;
+    margin: 0px;
+    border: 0px;
+}
+
+.pagecontent{
+    margin-top: 10px;
+    padding-bottom: 20rem; 
 }
 
 .containerL {
@@ -25,18 +37,14 @@ html, body {
     padding: 10px;
  }
 
-.footer {
-    background-color: #F1F1F1;
-    text-align: center;
-    padding: 10px;
-    position: absolute;
-    bottom:0%;
-    width: 100%;
-  }
-
 .btn {
     background:#95b7ed;
     padding: 13px 25px;
     text-decoration: none;
     color: white;
 }
+
+th, td {
+    border: 1px solid black;
+}
+  

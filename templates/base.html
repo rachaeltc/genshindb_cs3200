@@ -7,20 +7,17 @@
     </head>
             
     <body>
-        <!-- 
-        <div class="header">
-            <h1> Genshin Impact Project</h1> 
-        </div> 
-        -->
-        {% block content %} {% endblock %}
-        <br />
-        {% block output %} {% endblock %}
-        <!--
-        <div class="footer">
-            <h3> Caitlin Chao and Rachael Cheung </h3>
-            <h3> Spring 2021 CS 3200 </h3>  
+        <div class="page-container">
+            <div class="header">
+                <h1> Genshin Impact Project</h1> 
+            </div> 
+    
+            <div class="pagecontent">
+                {% block content %} {% endblock %}
+                <br />
+                {% block output %} {% endblock %}
+            </div>
         </div>
-        -->
     </body>
 </html>
             

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} CS 3200 Project {% endblock %}
+{% block title %} View Database Data {% endblock %}
 {% block content %}
 <form action="#" method ="post">
     <label for="table">Choose a table:</label>
@@ -10,15 +10,15 @@
         <option value="* FROM gs_elemental_resonance">Elemental Resonance</option>
         <option value="* FROM gs_recommended_party">Compatible Characters</option>
     </select>
-    <input type="submit" value="submit"/>
+    <input type="submit" value="Submit"/>
 </form>
 {% endblock %}
 
 {% block output %}
-<table>
+<table class="dataoutput">
     <tr>
         {% for i in columns %}
-        <td> <h3> {{ i }}  </h3></td>
+        <th> {{ i }}  </th>
         {% endfor %}
     </tr>
 {% for row in output %}
@@ -28,5 +28,5 @@
     {% endfor %}
     </tr>
 {% endfor %}
-></table>
+</table>
 {% endblock %}
