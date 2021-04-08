@@ -4,17 +4,17 @@
 <form action="#" method ="post">
     <label for="table">Choose a table:</label>
     <select name="table">
-        <option value="gs_character">Characters</option>
-        <option value="gs_weapon">Weapons</option>
-        <option value="gs_elemental_resonance">Elemental Resonance</option>
-        <option value="gs_recommended_party">Compatible Characters</option>
+        <option value="character_name, element, base_atk, base_hp, rarity, weapon_type, birthday, constellation FROM gs_character">Characters </option>
+        <option value="character_name, vision, story_profile FROM gs_character">Character Stories </option>
+        <option value="* FROM gs_weapon">Weapons</option>
+        <option value="* FROM gs_elemental_resonance">Elemental Resonance</option>
+        <option value="* FROM gs_recommended_party">Compatible Characters</option>
     </select>
     <input type="submit" value="submit"/>
 </form>
 {% endblock %}
 
 {% block output %}
-
 <table>
     <tr>
         {% for i in columns %}

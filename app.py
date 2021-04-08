@@ -15,7 +15,7 @@ def data():
     if request.method == "POST":
         tbl = request.form["table"]
         cur = connection.cursor()
-        query = "SELECT * FROM " + tbl 
+        query = "SELECT " + tbl 
         cur.execute(query)
         output2 = cur.fetchall()
         cols = []
