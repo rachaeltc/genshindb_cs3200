@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="containerL">
-    <h3> To view general data about the characters <br/> and weapons in Genshin Impact:</h3>
-    <p> <a class="btn" href="{{ url_for('data') }}">View Data</a> </p> 
-</div>
-<div class="containerR">
-    <h3> To make your own teams and put in your game data: </h3>
-    <p> <a class="btn" href="{{ url_for('make_team') }}"> Create Teams</a>  </p>
-</div>
+<form action="#" method ="post">
+    <label for="user">username: </label>
+    <input type="text" name="user" />
+    <br />
+    <label for="pw">password: </label>
+    <input type="text" name="pw" />
+    <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
+{% block output %}
+<p> {{ error }}  </p>
 {% endblock %}
