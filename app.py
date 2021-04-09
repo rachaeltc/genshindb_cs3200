@@ -22,10 +22,20 @@ def index():
 
 @app.route("/home")
 def home():
+    if "user" not in session:
+        return redirect(url_for("index"))
     return render_template("home.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("user")
+    session.pop("pw")
+    return redirect(url_for("index"))
 
 @app.route("/data", methods=['POST', 'GET'])
 def data():
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     if request.method == "POST":
@@ -44,12 +54,16 @@ def data():
 
 @app.route("/make_team")
 def make_team():
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("team.html")
 
 @app.route("/weapons", methods=['POST', 'GET'])
 def enter_weapons():
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     # get weapon names
@@ -59,15 +73,6 @@ def enter_weapons():
     gs_weaponnames = []
     for row in output2:
         gs_weaponnames.append(row["weapon_name"])
-    cur.close()
-
-    # get character names
-    cur = connection.cursor()
-    cur.execute("SELECT character_name FROM gs_character")
-    output3 = cur.fetchall()
-    gs_characternames = []
-    for row in output3:
-        gs_characternames.append(row["character_name"])
     cur.close()
 
     cur = connection.cursor()
@@ -84,16 +89,30 @@ def enter_weapons():
         output5 = cur.fetchall()
         cur.close()
         return render_template("weapons.html", 
-            weapons = gs_weaponnames, characters = gs_characternames, output = output5, proceed = True)
+            weapons = gs_weaponnames, output = output5, proceed = True)
     else:
         return render_template("weapons.html", 
-        weapons = gs_weaponnames, characters = gs_characternames, output = output4, proceed = False)
+        weapons = gs_weaponnames, output = output4, proceed = False)
 
 @app.route("/characters", methods=['POST', 'GET'])
 def enter_characters():
+    if "user" not in session:
+        return redirect(url_for("index"))
+        
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+    # get character names
+    cur = connection.cursor()
+    cur.execute("SELECT character_name FROM gs_character")
+    output3 = cur.fetchall()
+    gs_characternames = []
+    for row in output3:
+        gs_characternames.append(row["character_name"])
+    cur.close()
+
     return render_template("character.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
