@@ -1,17 +1,33 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
 import pymysql
 
 app = Flask(__name__)
+app.secret_key = "genshindb"
 
-connection = pymysql.connect(host='localhost', user='root', password='SQLchael324!',
-        db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+@app.route("/", methods=['POST', 'GET'])
+def index():
+    if request.method == "POST":
+        try:
+            session["user"] = request.form["user"]
+            session["pw"] = request.form["pw"]
+            connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        except pymysql.err.OperationalError:
+            return render_template("index.html", error = "Wrong credentials. Try again!")
+        else:
+            connection.close()
+            return redirect(url_for("home"))
+    else:
+        return render_template("index.html")
 
-@app.route("/")
+@app.route("/home")
 def home():
-    return render_template("index.html")
+    return render_template("home.html")
 
 @app.route("/data", methods=['POST', 'GET'])
 def data():
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     if request.method == "POST":
         tbl = request.form["table"]
         cur = connection.cursor()
@@ -28,10 +44,14 @@ def data():
 
 @app.route("/make_team")
 def make_team():
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("team.html")
 
 @app.route("/weapons", methods=['POST', 'GET'])
 def enter_weapons():
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     # get weapon names
     cur = connection.cursor()
     cur.execute("SELECT weapon_name FROM gs_weapon")
@@ -71,9 +91,10 @@ def enter_weapons():
 
 @app.route("/characters", methods=['POST', 'GET'])
 def enter_characters():
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("character.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
 
-connection.close()
