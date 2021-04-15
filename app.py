@@ -33,7 +33,7 @@ def logout():
     return redirect(url_for("index"))
 
 @app.route("/data", methods=['POST', 'GET'])
-def data():
+def data(connection):
     if "user" not in session:
         return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
@@ -48,6 +48,7 @@ def data():
         for row in output1[0]:
             cols.append(row)
         cur.close()
+        #close connection
         return render_template("data.html", output = output1, columns = cols)
     else:
         return render_template("data.html", output = '')
@@ -83,10 +84,9 @@ def enter_weapons():
     if request.method == "POST":
         cur = connection.cursor()
         cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
-        cur.close()
-        cur = connection.cursor()
         cur.execute("SELECT * FROM user_weapon")
         output5 = cur.fetchall()
+        connection.commit() #!!!
         cur.close()
         return render_template("weapons.html", 
             weapons = gs_weaponnames, output = output5, proceed = True)
