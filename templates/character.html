@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block logout %}
+<p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
+{% endblock %}
 {% block content %}
 <h3> coming soon: enter your character data </h3>
 {% endblock %}

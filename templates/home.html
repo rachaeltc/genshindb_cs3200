@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block logout %}
+<p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
+{% endblock %}
 {% block content %}
 <div class="containerL">
     <h3> To view general data about the characters <br/> and weapons in Genshin Impact:</h3>

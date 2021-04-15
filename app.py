@@ -22,10 +22,20 @@ def index():
 
 @app.route("/home")
 def home():
+    if "user" not in session:
+        return redirect(url_for("index"))
     return render_template("home.html")
 
+@app.route("/logout")
+def logout():
+    session.pop("user")
+    session.pop("pw")
+    return redirect(url_for("index"))
+
 @app.route("/data", methods=['POST', 'GET'])
-def data():
+def data(connection):
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     if request.method == "POST":
@@ -38,18 +48,23 @@ def data():
         for row in output1[0]:
             cols.append(row)
         cur.close()
+        #close connection
         return render_template("data.html", output = output1, columns = cols)
     else:
         return render_template("data.html", output = '')
 
 @app.route("/make_team")
 def make_team():
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("team.html")
 
 @app.route("/weapons", methods=['POST', 'GET'])
 def enter_weapons():
+    if "user" not in session:
+        return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
                 db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     # get weapon names
@@ -61,6 +76,64 @@ def enter_weapons():
         gs_weaponnames.append(row["weapon_name"])
     cur.close()
 
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM user_weapon")
+    output4 = cur.fetchall()
+    cur.close()
+
+    cont = False
+    if len(output4) > 0:
+        cont = True 
+
+    if request.method == "POST":
+        if request.form["button_id"] == "add":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "mod":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "mod", proceed = cont)
+        elif request.form["button_id"] == "del":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "del", proceed = cont)
+        if request.form["button_id"] == "add user weapon":
+            cur = connection.cursor()
+            cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "modify user weapon":
+            cur = connection.cursor()
+            cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "mod", proceed = cont)
+        elif request.form["button_id"] == "delete user weapon":
+            cur = connection.cursor()
+            cur.callproc("del_user_weapon", (request.form["weaponid"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "del", proceed = cont)
+    else:
+        return render_template("weapons.html", 
+        weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
+
+@app.route("/characters", methods=['POST', 'GET'])
+def enter_characters():
+    if "user" not in session:
+        return redirect(url_for("index"))
+        
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
     # get character names
     cur = connection.cursor()
     cur.execute("SELECT character_name FROM gs_character")
@@ -70,30 +143,8 @@ def enter_weapons():
         gs_characternames.append(row["character_name"])
     cur.close()
 
-    cur = connection.cursor()
-    cur.execute("SELECT * FROM user_weapon")
-    output4 = cur.fetchall()
-    cur.close()
-
-    if request.method == "POST":
-        cur = connection.cursor()
-        cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
-        cur.close()
-        cur = connection.cursor()
-        cur.execute("SELECT * FROM user_weapon")
-        output5 = cur.fetchall()
-        cur.close()
-        return render_template("weapons.html", 
-            weapons = gs_weaponnames, characters = gs_characternames, output = output5, proceed = True)
-    else:
-        return render_template("weapons.html", 
-        weapons = gs_weaponnames, characters = gs_characternames, output = output4, proceed = False)
-
-@app.route("/characters", methods=['POST', 'GET'])
-def enter_characters():
-    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
-                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("character.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

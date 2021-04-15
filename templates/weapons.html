@@ -1,6 +1,37 @@
 {% extends "base.html" %}
 {% block title %} Enter Your Data! {% endblock %}
+
+{% block logout %}
+<p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
+{% endblock %}
+
+{% block navbar %}
+<div class = "nav">
+<ul>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="add" />
+        <input type="submit" value="Add Your Weapons"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="mod" />
+        <input type="submit" value="Modify Your Weapons"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="del" />
+        <input type="submit" value="Delete Your Weapons"/>
+        </form>
+    </li>
+</ul>
+</div>
+{% endblock %}
+
 {% block content %}
+{% if mode == "add" %}
 <form action="#" method ="post">
     <label for="weapon">Select weapon name:</label>
     <select name="weapon">
@@ -16,8 +47,47 @@
         <option value=4> 4 </option>
         <option value=5> 5 </option>
     </select>
+    <input type="hidden" name="button_id" value="add user weapon" />
     <input type="submit" value="Submit"/>
 </form>
+{% elif mode == "mod" %}
+<form action="#" method ="post">
+    <label for="weapon">Select weapon id to modify:</label>
+    <select name="weaponid">
+    {% for row in output %}
+    <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
+    {% endfor %}
+    </select>
+    <label for="weapon">Select weapon name:</label>
+    <select name="weapon">
+    {% for weap in weapons %}
+    <option value="{{weap}}"> {{weap}} </option>
+    {% endfor %}
+    </select>
+    <label for="refinementlvl">Enter weapon refinement:</label>
+    <select name="refinementlvl">
+        <option value=1> 1 </option>
+        <option value=2> 2 </option>
+        <option value=3> 3 </option>
+        <option value=4> 4 </option>
+        <option value=5> 5 </option>
+    </select>
+    <input type="hidden" name="button_id" value="modify user weapon" />
+    <input type="submit" value="Submit"/>
+</form>
+{% elif mode == "del" %}
+<form action="#" method ="post">
+    <label for="weapon">Select weapon id to delete:</label>
+    <select name="weaponid">
+    {% for row in output %}
+    <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="delete user weapon" />
+    <input type="submit" value="Submit"/>
+</form>
+{% endif %} 
+
 {% endblock %}
 
 {% block output %}
