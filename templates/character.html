@@ -2,6 +2,32 @@
 {% block logout %}
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
+
+{% block navbar %}
+<div class = "nav">
+<ul>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="add" />
+        <input type="submit" value="Add Your Characters"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="mod" />
+        <input type="submit" value="Modify Your Characters"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="del" />
+        <input type="submit" value="Delete Your Characters"/>
+        </form>
+    </li>
+</ul>
+</div>
+{% endblock %}
+
 {% block content %}
 <h3> coming soon: enter your character data </h3>
 {% endblock %}
