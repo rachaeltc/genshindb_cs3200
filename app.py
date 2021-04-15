@@ -100,10 +100,28 @@ def enter_weapons():
             cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
             cur.execute("SELECT * FROM user_weapon")
             output5 = cur.fetchall()
-            connection.commit() #!!!
+            connection.commit() 
             cur.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output5, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "modify user weapon":
+            cur = connection.cursor()
+            cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "mod", proceed = cont)
+        elif request.form["button_id"] == "delete user weapon":
+            cur = connection.cursor()
+            cur.callproc("del_user_weapon", (request.form["weaponid"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "del", proceed = cont)
     else:
         return render_template("weapons.html", 
         weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)

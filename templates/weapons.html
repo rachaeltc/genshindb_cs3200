@@ -53,7 +53,16 @@
 {% elif mode == "mod" %}
 <p> modify weapons </p>
 {% elif mode == "del" %}
-<p> delete weapons</p>
+<form action="#" method ="post">
+    <label for="weapon">Select weapon id to delete:</label>
+    <select name="weaponid">
+    {% for row in output %}
+    <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="delete user weapon" />
+    <input type="submit" value="Submit"/>
+</form>
 {% endif %} 
 
 {% endblock %}
