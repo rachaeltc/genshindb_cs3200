@@ -5,7 +5,33 @@
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
 
+{% block navbar %}
+<div class = "nav">
+<ul>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="add" />
+        <input type="submit" value="Add Your Weapons"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="mod" />
+        <input type="submit" value="Modify Your Weapons"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="del" />
+        <input type="submit" value="Delete Your Weapons"/>
+        </form>
+    </li>
+</ul>
+</div>
+{% endblock %}
+
 {% block content %}
+{% if mode == "add" %}
 <form action="#" method ="post">
     <label for="weapon">Select weapon name:</label>
     <select name="weapon">
@@ -21,8 +47,15 @@
         <option value=4> 4 </option>
         <option value=5> 5 </option>
     </select>
+    <input type="hidden" name="button_id" value="add user weapon" />
     <input type="submit" value="Submit"/>
 </form>
+{% elif mode == "mod" %}
+<p> modify weapons </p>
+{% elif mode == "del" %}
+<p> delete weapons</p>
+{% endif %} 
+
 {% endblock %}
 
 {% block output %}

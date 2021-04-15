@@ -81,18 +81,32 @@ def enter_weapons():
     output4 = cur.fetchall()
     cur.close()
 
+    cont = False
+    if len(output4) > 0:
+        cont = True 
+
     if request.method == "POST":
-        cur = connection.cursor()
-        cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
-        cur.execute("SELECT * FROM user_weapon")
-        output5 = cur.fetchall()
-        connection.commit() #!!!
-        cur.close()
-        return render_template("weapons.html", 
-            weapons = gs_weaponnames, output = output5, proceed = True)
+        if request.form["button_id"] == "add":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "mod":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "mod", proceed = cont)
+        elif request.form["button_id"] == "del":
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output4, mode = "del", proceed = cont)
+        if request.form["button_id"] == "add user weapon":
+            cur = connection.cursor()
+            cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() #!!!
+            cur.close()
+            return render_template("weapons.html", 
+                weapons = gs_weaponnames, output = output5, mode = "add", proceed = cont)
     else:
         return render_template("weapons.html", 
-        weapons = gs_weaponnames, output = output4, proceed = False)
+        weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
 
 @app.route("/characters", methods=['POST', 'GET'])
 def enter_characters():
