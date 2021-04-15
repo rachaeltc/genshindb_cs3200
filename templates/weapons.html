@@ -50,7 +50,7 @@
     <input type="hidden" name="button_id" value="add user weapon" />
     <input type="submit" value="Submit"/>
 </form>
-{% elif mode == "mod" %}
+{% elif mode == "mod" and proceed %}
 <form action="#" method ="post">
     <label for="weapon">Select weapon id to modify:</label>
     <select name="weaponid">
@@ -75,7 +75,7 @@
     <input type="hidden" name="button_id" value="modify user weapon" />
     <input type="submit" value="Submit"/>
 </form>
-{% elif mode == "del" %}
+{% elif mode == "del" and proceed %}
 <form action="#" method ="post">
     <label for="weapon">Select weapon id to delete:</label>
     <select name="weaponid">
@@ -86,12 +86,16 @@
     <input type="hidden" name="button_id" value="delete user weapon" />
     <input type="submit" value="Submit"/>
 </form>
+{% elif mode == "mod" and not proceed %}
+<p> no weapons to modify </p>
+{% elif mode == "del" and not proceed %}
+<p> no weapons to delete </p>
 {% endif %} 
 
 {% endblock %}
 
 {% block output %}
-<table>
+<table class = "output">
     <tr>
         <th> id </th>
         <th> weapon_name </th>

@@ -33,7 +33,7 @@ def logout():
     return redirect(url_for("index"))
 
 @app.route("/data", methods=['POST', 'GET'])
-def data(connection):
+def data():
     if "user" not in session:
         return redirect(url_for("index"))
     connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
@@ -48,7 +48,7 @@ def data(connection):
         for row in output1[0]:
             cols.append(row)
         cur.close()
-        #close connection
+        connection.close()
         return render_template("data.html", output = output1, columns = cols)
     else:
         return render_template("data.html", output = '')
@@ -57,8 +57,6 @@ def data(connection):
 def make_team():
     if "user" not in session:
         return redirect(url_for("index"))
-    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
-                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     return render_template("team.html")
 
 @app.route("/weapons", methods=['POST', 'GET'])
@@ -87,12 +85,15 @@ def enter_weapons():
 
     if request.method == "POST":
         if request.form["button_id"] == "add":
+            connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
         elif request.form["button_id"] == "mod":
+            connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "mod", proceed = cont)
         elif request.form["button_id"] == "del":
+            connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "del", proceed = cont)
         if request.form["button_id"] == "add user weapon":
@@ -102,6 +103,11 @@ def enter_weapons():
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
+            connection.close()
+            if len(output5) > 0:
+                cont = True 
+            else:
+                cont = False
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output5, mode = "add", proceed = cont)
         elif request.form["button_id"] == "modify user weapon":
@@ -111,6 +117,11 @@ def enter_weapons():
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
+            connection.close()
+            if len(output5) > 0:
+                cont = True 
+            else:
+                cont = False
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output5, mode = "mod", proceed = cont)
         elif request.form["button_id"] == "delete user weapon":
@@ -120,9 +131,15 @@ def enter_weapons():
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
+            connection.close()
+            if len(output5) > 0:
+                cont = True 
+            else:
+                cont = False
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output5, mode = "del", proceed = cont)
     else:
+        connection.close()
         return render_template("weapons.html", 
         weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
 
