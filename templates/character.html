@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block title %} Enter Your Characters! {% endblock %}
 {% block logout %}
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
@@ -29,5 +30,77 @@
 {% endblock %}
 
 {% block content %}
-<h3> coming soon: enter your character data </h3>
+{% if mode == "add" %}
+<form action="#" method ="post">
+    <label for="character">Select weapon name:</label>
+    <select name="character">
+    {% for char in characters %}
+    <option value="{{char}}"> {{char}} </option>
+    {% endfor %}
+    </select>
+    <label for="constellationlvl">Enter character constellation level:</label>
+    <select name="constellationlvl">
+        <option value=1> 1 </option>
+        <option value=2> 2 </option>
+        <option value=3> 3 </option>
+        <option value=4> 4 </option>
+        <option value=5> 5 </option>
+        <option value=6> 6 </option>
+    </select>
+    <label for="talentlvl">Enter character talent level:</label>
+    <select name="talentlvl">
+        {% for x in range(15) %}
+        <option value="{{x+1}}"> {{x+1}} </option>
+        {% endfor %}
+    </select>
+    <label for="equipped">Enter character's weapon:</label>
+    <select name="equipped">
+        <option value=-1> None </option>
+        {% for row in weaps %}
+        <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
+        {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="add user character" />
+    <input type="submit" value="Submit"/>
+</form>
+{% elif mode == "mod" and proceed %}
+<p> modifying abilities coming soon </p>
+
+{% elif mode == "del" and proceed %}
+<p> deleting abilities coming soon</p>
+
+{% elif mode == "mod" and not proceed %}
+<p> no weapons to modify </p>
+{% elif mode == "del" and not proceed %}
+<p> no weapons to delete </p>
+{% endif %} 
+{% endblock %}
+
+{% block output %}
+<p> {{ err }} </p>
+<table class = "output">
+    <tr>
+        <th> character_name </th>
+        <th> constellation_lvl </th>
+        <th> talent_lvl </th>
+        <th> equipped_weapon </th>
+    </tr>
+{% for row in output %}
+    <tr>
+    {% for col in row %}
+    <td> {{ row[col] }} </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block finish %}
+<h3> go back to weapon data: </h3>
+    <p> <a class="btn" href="{{ url_for('enter_weapons') }}"> return to weapons </a> </p>  
+
+{% if proceed %}
+    <h3> move on to team data: </h3>
+    <p> <a class="btn" href="{{ url_for('enter_teams') }}"> enter teams </a> </p>  
+{% endif %} 
 {% endblock %}

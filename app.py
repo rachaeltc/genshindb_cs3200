@@ -57,7 +57,7 @@ def data():
 def make_team():
     if "user" not in session:
         return redirect(url_for("index"))
-    return render_template("team.html")
+    return render_template("make_team.html")
 
 @app.route("/weapons", methods=['POST', 'GET'])
 def enter_weapons():
@@ -161,7 +161,13 @@ def enter_characters():
         gs_characternames.append(row["character_name"])
     cur.close()
 
-    # get user weapons so far
+    # get user weapons 
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM user_weapon")
+    output4 = cur.fetchall()
+    cur.close()
+
+    # get user characters so far
     cur = connection.cursor()
     cur.execute("SELECT * FROM user_character")
     output3 = cur.fetchall()
@@ -171,22 +177,44 @@ def enter_characters():
     if len(output3) > 0:
         cont = True
     if request.method == "POST":
+        # navbar handling
         if request.form["button_id"] == "add": # add selected from navbar
             connection.close()
             return render_template("character.html", 
-                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+                characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err='')
         elif request.form["button_id"] == "mod": # modify selected from navbar
             connection.close()
             return render_template("character.html", 
-                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+                characters = gs_characternames,  weaps = output4, output = output3, mode = "mod", proceed = cont, err='')
         elif request.form["button_id"] == "del": # delete selected from navbar
             connection.close()
             return render_template("character.html", 
-                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+                characters = gs_characternames, output = output3, mode = "del", proceed = cont, err='')
+        # user data input
         if request.form["button_id"] == "add user character":
+            # check if entered weapon is valid for character
             cur = connection.cursor()
-            cur.callproc("add_user_character", (request.form["weapon"], request.form["refinementlvl"],))
-            cur.execute("SELECT * FROM user_weapon")
+            cur.callproc("weapons_list", (request.form["character"],))
+            valid_weapon_ids = []
+            rows = cur.fetchall()
+            cur.close()
+            for row in rows:
+                valid_weapon_ids.append(row["weapon_id"])
+            cur = connection.cursor()
+            selected_id = request.form["equipped"]
+            print(selected_id)
+            print(valid_weapon_ids)
+            if selected_id == -1:
+                print("he")
+                cur.callproc("add_user_character_null", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"],))
+            #elif selected_id not in valid_weapon_ids: 
+            #    print("har")
+            #    return render_template("character.html", 
+            #        characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err = "character cannot be equipped with this weapon type")
+            elif selected_id >= 0:
+                print("hoo")
+                #cur.callproc("add_user_character", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"], request.form["equipped"],))
+            cur.execute("SELECT * FROM user_character")
             output6 = cur.fetchall()
             connection.commit() 
             cur.close()
@@ -196,7 +224,7 @@ def enter_characters():
             else:
                 cont = False
             return render_template("character.html", 
-                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+                characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
         elif request.form["button_id"] == "modify user weapon":
             cur = connection.cursor()
             cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
@@ -210,7 +238,7 @@ def enter_characters():
             else:
                 cont = False
             return render_template("character.html", 
-                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+                characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
         elif request.form["button_id"] == "delete user weapon":
             cur = connection.cursor()
             cur.callproc("del_user_weapon", (request.form["weaponid"],))
@@ -224,11 +252,17 @@ def enter_characters():
             else:
                 cont = False
             return render_template("character.html", 
-                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+                characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
     else:
         connection.close()
         return render_template("character.html", 
-                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+                characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err='')
+
+@app.route("/teams")
+def enter_teams():
+    if "user" not in session:
+        return redirect(url_for("index"))
+    return render_template("team.html")
 
 
 if __name__ == "__main__":
