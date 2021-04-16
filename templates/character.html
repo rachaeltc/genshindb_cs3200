@@ -67,15 +67,59 @@
     <input type="submit" value="Submit"/>
 </form>
 {% elif mode == "mod" and proceed %}
-<p> modifying abilities coming soon </p>
+<form action="#" method ="post">
+    <label for="weapon">Select character to modify:</label>
+    <select name="character">
+        {% for row in output %}
+        <option value="{{ row['character_name']}}"> {{row['character_name']}} </option>
+        {% endfor %}
+    </select>
+    <br />
+    <label for="constellationlvl">Enter character constellation level:</label>
+    <select name="constellationlvl">
+        <option value=1> 1 </option>
+        <option value=2> 2 </option>
+        <option value=3> 3 </option>
+        <option value=4> 4 </option>
+        <option value=5> 5 </option>
+        <option value=6> 6 </option>
+    </select>
+    <br />
+    <label for="talentlvl">Enter character talent level:</label>
+    <select name="talentlvl">
+        {% for x in range(15) %}
+        <option value="{{x+1}}"> {{x+1}} </option>
+        {% endfor %}
+    </select>
+    <br />
+    <label for="equipped">Enter character's weapon:</label>
+    <select name="equipped">
+        <option value=-1> None </option>
+        {% for row in weaps %}
+        <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
+        {% endfor %}
+    </select>
+    <br />
+    <input type="hidden" name="button_id" value="modify user character" />
+    <input type="submit" value="Submit"/>
+</form>
 
 {% elif mode == "del" and proceed %}
-<p> deleting abilities coming soon</p>
+<form action="#" method ="post">
+    <label for="character">Select character to delete:</label>
+    <select name="character">
+    {% for row in output %}
+    <option value="{{ row['character_name']}}"> {{row['character_name']}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="delete user character" />
+    <input type="submit" value="Submit"/>
+</form>
 
 {% elif mode == "mod" and not proceed %}
-<p> no weapons to modify </p>
+<p> no characters to modify </p>
 {% elif mode == "del" and not proceed %}
-<p> no weapons to delete </p>
+<p> no characters to delete </p>
 {% endif %} 
 {% endblock %}
 

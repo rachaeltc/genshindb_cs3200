@@ -199,7 +199,7 @@ def enter_characters():
             return render_template("character.html", 
                 characters = gs_characternames, output = output3, mode = "del", proceed = cont, err='')
         # user data input
-        if request.form["button_id"] == "add user character":
+        if request.form["button_id"] == "add user character" :
             # check if entered weapon is valid for character
             cur = connection.cursor()
             cur.callproc("weapons_list", (request.form["character"],))
@@ -211,8 +211,6 @@ def enter_characters():
             cur = connection.cursor()
             selected_id = int(request.form["equipped"])
             selected_char = str(request.form["character"])
-            print(selected_char)
-            print(existing_characters)
             if selected_char in existing_characters: # if character is duplicate
                 return render_template("character.html", 
                         characters = gs_characternames, weaps = output4, output = output3, mode = "add", 
@@ -242,33 +240,55 @@ def enter_characters():
             return render_template("character.html", 
                 characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
         elif request.form["button_id"] == "modify user character":
+            # check if entered weapon is valid for character
             cur = connection.cursor()
-            cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
+            cur.callproc("weapons_list", (request.form["character"],))
+            valid_weapon_ids = []
+            rows = cur.fetchall()
+            cur.close()
+            for row in rows:
+                valid_weapon_ids.append(row["weapon_id"])
+            cur = connection.cursor()
+            selected_id = int(request.form["equipped"])
+            selected_char = str(request.form["character"])
+            if selected_id == -1: # if weapon entered is None
+                cur.callproc("mod_user_character_null", (selected_char, request.form["constellationlvl"], request.form["talentlvl"],))
+            elif selected_id not in valid_weapon_ids: # if weapon is not a valid type
+                return render_template("character.html", 
+                    characters = gs_characternames, weaps = output4, output = output3, mode = "mod", 
+                    proceed = cont, err = "character cannot be equipped with this weapon type")
+            elif selected_id in already_equipped: # weapon is already equipped
+                return render_template("character.html", 
+                    characters = gs_characternames, weaps = output4, output = output3, mode = "mod", 
+                    proceed = cont, err = "weapon equipped on another character")
+            else: # character modification is valid
+                cur.callproc("mod_user_character", (selected_char, request.form["constellationlvl"], request.form["talentlvl"], selected_id,))     
+            # get updated user character table
+            cur.execute("SELECT * FROM user_character")
+            output6 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output6) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("character.html", 
+                characters = gs_characternames, weaps = output4, output = output6, mode = "mod", proceed = cont, err='')
+        elif request.form["button_id"] == "delete user character":
+            cur = connection.cursor()
+            cur.callproc("del_user_character", (request.form["character"],))
             cur.execute("SELECT * FROM user_character")
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
             connection.close()
-            if len(output6) > 0:
+            if len(output5) > 0:
                 cont = True 
             else:
                 cont = False
             return render_template("character.html", 
-                characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
-        elif request.form["button_id"] == "delete user character":
-            cur = connection.cursor()
-            cur.callproc("del_user_weapon", (request.form["weaponid"],))
-            cur.execute("SELECT * FROM user_weapon")
-            output5 = cur.fetchall()
-            connection.commit() 
-            cur.close()
-            connection.close()
-            if len(output6) > 0:
-                cont = True 
-            else:
-                cont = False
-            return render_template("character.html", 
-                characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
+                characters = gs_characternames, weaps = output4, output = output5, mode = "del", proceed = cont, err='')
     else:
         connection.close()
         return render_template("character.html", 
