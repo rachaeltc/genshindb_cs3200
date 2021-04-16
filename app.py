@@ -74,25 +74,26 @@ def enter_weapons():
         gs_weaponnames.append(row["weapon_name"])
     cur.close()
 
+    # get user weapons so far
     cur = connection.cursor()
     cur.execute("SELECT * FROM user_weapon")
     output4 = cur.fetchall()
     cur.close()
 
-    cont = False
+    cont = False # able to proceed to characters if there are user weapons
     if len(output4) > 0:
         cont = True 
 
     if request.method == "POST":
-        if request.form["button_id"] == "add":
+        if request.form["button_id"] == "add": # add selected from navbar
             connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "add", proceed = cont)
-        elif request.form["button_id"] == "mod":
+        elif request.form["button_id"] == "mod": # modify selected from navbar
             connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "mod", proceed = cont)
-        elif request.form["button_id"] == "del":
+        elif request.form["button_id"] == "del": # delete selected from navbar
             connection.close()
             return render_template("weapons.html", 
                 weapons = gs_weaponnames, output = output4, mode = "del", proceed = cont)
@@ -154,13 +155,80 @@ def enter_characters():
     # get character names
     cur = connection.cursor()
     cur.execute("SELECT character_name FROM gs_character")
-    output3 = cur.fetchall()
+    output = cur.fetchall()
     gs_characternames = []
-    for row in output3:
+    for row in output:
         gs_characternames.append(row["character_name"])
     cur.close()
 
-    return render_template("character.html")
+    # get user weapons so far
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM user_character")
+    output3 = cur.fetchall()
+    cur.close()
+
+    cont = False # able to proceed to teams if there are user characters
+    if len(output3) > 0:
+        cont = True
+    if request.method == "POST":
+        if request.form["button_id"] == "add": # add selected from navbar
+            connection.close()
+            return render_template("character.html", 
+                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "mod": # modify selected from navbar
+            connection.close()
+            return render_template("character.html", 
+                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "del": # delete selected from navbar
+            connection.close()
+            return render_template("character.html", 
+                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
+        if request.form["button_id"] == "add user character":
+            cur = connection.cursor()
+            cur.callproc("add_user_character", (request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output6 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output6) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("character.html", 
+                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "modify user weapon":
+            cur = connection.cursor()
+            cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
+            cur.execute("SELECT * FROM user_character")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output6) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("character.html", 
+                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+        elif request.form["button_id"] == "delete user weapon":
+            cur = connection.cursor()
+            cur.callproc("del_user_weapon", (request.form["weaponid"],))
+            cur.execute("SELECT * FROM user_weapon")
+            output5 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output6) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("character.html", 
+                characters = gs_characternames, output = output6, mode = "add", proceed = cont)
+    else:
+        connection.close()
+        return render_template("character.html", 
+                characters = gs_characternames, output = output3, mode = "add", proceed = cont)
 
 
 if __name__ == "__main__":
