@@ -201,19 +201,14 @@ def enter_characters():
             for row in rows:
                 valid_weapon_ids.append(row["weapon_id"])
             cur = connection.cursor()
-            selected_id = request.form["equipped"]
-            print(selected_id)
-            print(valid_weapon_ids)
+            selected_id = int(request.form["equipped"])
             if selected_id == -1:
-                print("he")
                 cur.callproc("add_user_character_null", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"],))
-            #elif selected_id not in valid_weapon_ids: 
-            #    print("har")
-            #    return render_template("character.html", 
-            #        characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err = "character cannot be equipped with this weapon type")
-            elif selected_id >= 0:
-                print("hoo")
-                #cur.callproc("add_user_character", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"], request.form["equipped"],))
+            elif selected_id not in valid_weapon_ids: 
+                return render_template("character.html", 
+                    characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err = "character cannot be equipped with this weapon type")
+            else:
+                cur.callproc("add_user_character", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"], selected_id,))
             cur.execute("SELECT * FROM user_character")
             output6 = cur.fetchall()
             connection.commit() 
