@@ -173,6 +173,14 @@ def enter_characters():
     output3 = cur.fetchall()
     cur.close()
 
+    existing_characters=[] # current user character names list 
+    for row in output3:
+        existing_characters.append(row["character_name"])
+
+    already_equipped=[] # current user equipped weapons 
+    for row in output3:
+        already_equipped.append(row["weapon_id"])
+
     cont = False # able to proceed to teams if there are user characters
     if len(output3) > 0:
         cont = True
@@ -202,13 +210,26 @@ def enter_characters():
                 valid_weapon_ids.append(row["weapon_id"])
             cur = connection.cursor()
             selected_id = int(request.form["equipped"])
-            if selected_id == -1:
-                cur.callproc("add_user_character_null", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"],))
-            elif selected_id not in valid_weapon_ids: 
+            selected_char = str(request.form["character"])
+            print(selected_char)
+            print(existing_characters)
+            if selected_char in existing_characters: # if character is duplicate
                 return render_template("character.html", 
-                    characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err = "character cannot be equipped with this weapon type")
-            else:
-                cur.callproc("add_user_character", (request.form["character"], request.form["constellationlvl"], request.form["talentlvl"], selected_id,))
+                        characters = gs_characternames, weaps = output4, output = output3, mode = "add", 
+                        proceed = cont, err = "duplicate entry not allowed")  
+            elif selected_id == -1: # if weapon entered is None
+                cur.callproc("add_user_character_null", (selected_char, request.form["constellationlvl"], request.form["talentlvl"],))
+            elif selected_id not in valid_weapon_ids: # if weapon is not a valid type
+                return render_template("character.html", 
+                    characters = gs_characternames, weaps = output4, output = output3, mode = "add", 
+                    proceed = cont, err = "character cannot be equipped with this weapon type")
+            elif selected_id in already_equipped: # weaon is already equipped
+                return render_template("character.html", 
+                    characters = gs_characternames, weaps = output4, output = output3, mode = "add", 
+                    proceed = cont, err = "weapon equipped on another character")
+            else: # character addition is valid
+                cur.callproc("add_user_character", (selected_char, request.form["constellationlvl"], request.form["talentlvl"], selected_id,))     
+            # get updated user character table
             cur.execute("SELECT * FROM user_character")
             output6 = cur.fetchall()
             connection.commit() 
@@ -220,7 +241,7 @@ def enter_characters():
                 cont = False
             return render_template("character.html", 
                 characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
-        elif request.form["button_id"] == "modify user weapon":
+        elif request.form["button_id"] == "modify user character":
             cur = connection.cursor()
             cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
             cur.execute("SELECT * FROM user_character")
@@ -234,7 +255,7 @@ def enter_characters():
                 cont = False
             return render_template("character.html", 
                 characters = gs_characternames, weaps = output4, output = output6, mode = "add", proceed = cont, err='')
-        elif request.form["button_id"] == "delete user weapon":
+        elif request.form["button_id"] == "delete user character":
             cur = connection.cursor()
             cur.callproc("del_user_weapon", (request.form["weaponid"],))
             cur.execute("SELECT * FROM user_weapon")

@@ -38,6 +38,7 @@
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
     </select>
+    <br />
     <label for="constellationlvl">Enter character constellation level:</label>
     <select name="constellationlvl">
         <option value=1> 1 </option>
@@ -47,17 +48,19 @@
         <option value=5> 5 </option>
         <option value=6> 6 </option>
     </select>
+    <br />
     <label for="talentlvl">Enter character talent level:</label>
     <select name="talentlvl">
         {% for x in range(15) %}
         <option value="{{x+1}}"> {{x+1}} </option>
         {% endfor %}
     </select>
+    <br />
     <label for="equipped">Enter character's weapon:</label>
     <select name="equipped">
         <option value=-1> None </option>
         {% for row in weaps %}
-        <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
+        <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
         {% endfor %}
     </select>
     <input type="hidden" name="button_id" value="add user character" />
