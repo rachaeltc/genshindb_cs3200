@@ -15,12 +15,6 @@
     </li>
     <li class="option"> 
         <form action="#" method ="post">
-        <input type="hidden" name="button_id" value="mod" />
-        <input type="submit" value="Modify Your Teams"/>
-        </form>
-    </li>
-    <li class="option"> 
-        <form action="#" method ="post">
         <input type="hidden" name="button_id" value="del" />
         <input type="submit" value="Delete Your Teams"/>
         </form>
@@ -62,17 +56,21 @@
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
     </select>
-    <input type="hidden" name="button_id" value="add user character" />
+    <input type="hidden" name="button_id" value="add user team" />
     <input type="submit" value="Submit"/>
 </form>
-{% elif mode == "mod" and proceed %}
-<p> modify coming soon</p>
-
 {% elif mode == "del" and proceed %}
-<p> delete coming soon</p>
+<form action="#" method ="post">
+    <label for="teamid">Select team to delete:</label>
+    <select name="teamid">
+    {% for row in output %}
+    <option value="{{ row['team_id']}}"> {{row['team_id']}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="delete user team" />
+    <input type="submit" value="Submit"/>
+</form>
 
-{% elif mode == "mod" and not proceed %}
-<p> no teams to modify </p>
 {% elif mode == "del" and not proceed %}
 <p> no teams to delete </p>
 {% endif %} 
@@ -87,6 +85,7 @@
         <th> character1 </th>
         <th> character2 </th>
         <th> character3 </th>
+        <th> character4 </th>
         <th> resonance_types </th>
         <th> total_atk </th>
     </tr>
@@ -101,11 +100,11 @@
 {% endblock %}
 
 {% block finish %}
-<h3> go back to weapon data: </h3>
-    <p> <a class="btn" href="{{ url_for('enter_weapons') }}"> return to weapons </a> </p>  
+<h3> go back to character data: </h3>
+    <p> <a class="btn" href="{{ url_for('enter_characters') }}"> return to characters </a> </p>  
 
 {% if proceed %}
     <h3> move on to team data: </h3>
-    <p> <a class="btn" href="{{ url_for('enter_teams') }}"> enter teams </a> </p>  
+    <p> <a class="btn" href="{{ url_for('make_team') }}"> enter teams </a> </p>  
 {% endif %} 
 {% endblock %}

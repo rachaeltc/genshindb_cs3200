@@ -310,30 +310,75 @@ def enter_teams():
         user_characternames.append(row["character_name"])
     cur.close()
 
-    # get user team so far
+    # get user team view so far
     cur = connection.cursor()
-    cur.execute("SELECT * FROM user_team")
+    cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
     output7 = cur.fetchall()
     cur.close()
 
+    cont = False # to display deletion ability or not
+    if len(output7) > 0:
+        cont = True 
+ 
     if request.method == "POST":
         # navbar handling
         if request.form["button_id"] == "add": # add selected from navbar
             connection.close()
             return render_template("team.html", 
-                u_characters = user_characternames, output = output7, mode = "add", err='')
-        elif request.form["button_id"] == "mod": # modify selected from navbar
-            connection.close()
-            return render_template("team.html", 
-                u_characters = user_characternames, output = output7, mode = "mod", err='')
+                u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='')
         elif request.form["button_id"] == "del": # delete selected from navbar
             connection.close()
             return render_template("team.html", 
-                u_characters = user_characternames, output = output7, mode = "del", err='')
+                u_characters = user_characternames, output = output7, mode = "del", proceed = cont, err='')
+         # user data input
+        if request.form["button_id"] == "add user team" :
+            # check if team has duplicate members
+            cur = connection.cursor()
+            valid = "SELECT valid_team('" + request.form["character1"] + "', '" + request.form["character2"] + "', '" + request.form["character3"] + "', '" + request.form["character4"] + "')"
+            cur.execute(valid)
+            valid_output = cur.fetchall()
+            cur.close()
+            valid_list = ''
+            for row in valid_output:
+                valid_list= list(row.values())
+            ans = int.from_bytes(valid_list[0], 'little') # 0: false, 1: true 
+            cur = connection.cursor()
+            if ans == 0:
+                connection.close()
+                return render_template("team.html", 
+                    u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='cannot have duplicate characters on one team')
+            else: # team is valid
+                cur.callproc("add_user_team", (request.form["team_name"], request.form["character1"], request.form["character2"], request.form["character3"], request.form["character4"],))    
+            # get updated user team table view
+            cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
+            output8 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(ouptut8) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output8, mode = "add", proceed = cont, err='')
+        elif request.form["button_id"] == "delete user team":
+            cur = connection.cursor()
+            cur.callproc("del_user_team", (request.form["teamid"],))
+            cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
+            output8 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output8) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output8, mode = "del", proceed = cont, err='')
     else:
         connection.close()
         return render_template("team.html", 
-                u_characters = user_characternames, output = output7, mode = "add", err='')
+                u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='')
     
 
 
