@@ -16,6 +16,10 @@ html, body {
     border: 0px;
 }
 
+.opts {
+    display: flex;
+}
+
 .pagecontent{
     margin-top: 10px;
     padding-bottom: 20rem; 

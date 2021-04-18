@@ -355,7 +355,7 @@ def enter_teams():
             connection.commit() 
             cur.close()
             connection.close()
-            if len(ouptut8) > 0:
+            if len(output8) > 0:
                 cont = True 
             else:
                 cont = False
