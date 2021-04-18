@@ -39,10 +39,14 @@ html, body {
 
 .btn {
     background:#95b7ed;
-    padding: 13px 25px;
+    padding: 13px;
     text-decoration: none;
     color: white;
 }
+
+.btn:hover {
+    background-color: #4371bb;
+  }
 
 th, td {
     border: 1px solid black;
