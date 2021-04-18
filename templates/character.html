@@ -32,7 +32,7 @@
 {% block content %}
 {% if mode == "add" %}
 <form action="#" method ="post">
-    <label for="character">Select weapon name:</label>
+    <label for="character">Select character name:</label>
     <select name="character">
     {% for char in characters %}
     <option value="{{char}}"> {{char}} </option>

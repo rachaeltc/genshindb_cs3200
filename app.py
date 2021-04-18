@@ -294,11 +294,47 @@ def enter_characters():
         return render_template("character.html", 
                 characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err='')
 
-@app.route("/teams")
+@app.route("/teams", methods=['POST', 'GET'])
 def enter_teams():
     if "user" not in session:
         return redirect(url_for("index"))
-    return render_template("team.html")
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+    # get user character names
+    cur = connection.cursor()
+    cur.execute("SELECT character_name FROM user_character")
+    output = cur.fetchall()
+    user_characternames = []
+    for row in output:
+        user_characternames.append(row["character_name"])
+    cur.close()
+
+    # get user team so far
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM user_team")
+    output7 = cur.fetchall()
+    cur.close()
+
+    if request.method == "POST":
+        # navbar handling
+        if request.form["button_id"] == "add": # add selected from navbar
+            connection.close()
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "add", err='')
+        elif request.form["button_id"] == "mod": # modify selected from navbar
+            connection.close()
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "mod", err='')
+        elif request.form["button_id"] == "del": # delete selected from navbar
+            connection.close()
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "del", err='')
+    else:
+        connection.close()
+        return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "add", err='')
+    
 
 
 if __name__ == "__main__":
