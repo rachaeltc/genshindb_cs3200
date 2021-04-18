@@ -380,6 +380,26 @@ def enter_teams():
         return render_template("team.html", 
                 u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='')
     
+@app.route("/my_data", methods=['POST', 'GET'])
+def my_data():
+    if "user" not in session:
+        return redirect(url_for("index"))
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+    if request.method == "POST":
+        tbl = request.form["table"]
+        cur = connection.cursor()
+        query = "SELECT " + tbl 
+        cur.execute(query)
+        output1 = cur.fetchall()
+        cols = []
+        for row in output1[0]:
+            cols.append(row)
+        cur.close()
+        connection.close()
+        return render_template("mydata.html", output = output1, columns = cols)
+    else:
+        return render_template("mydata.html", output = '')
 
 
 if __name__ == "__main__":

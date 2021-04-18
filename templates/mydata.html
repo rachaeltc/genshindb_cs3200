@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %} View Your Entered Data {% endblock %}
+
+{% block logout %}
+<p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
+{% endblock %}
+
+{% block content %}
+<form action="#" method ="post">
+    <label for="table">Choose a table:</label>
+    <select name="table">
+        <option value="* FROM user_weapon"> Your Weapons </option>
+        <option value="* FROM user_character"> Your Characters </option>
+        <option value="*, resonance_concat(team_id), team_atk(team_id) FROM user_team;"> Your Teams </option>
+    </select>
+    <input type="submit" value="Submit"/>
+</form>
+{% endblock %}
+
+{% block output %}
+<table class="dataoutput">
+    <tr>
+        {% for i in columns %}
+        <th> {{ i }}  </th>
+        {% endfor %}
+    </tr>
+{% for row in output %}
+    <tr>
+    {% for col in row %}
+    <td> {{ row[col] }} </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block finish %}
+<h3> enter more data: </h3>
+    <p> <a class="btn" href="{{ url_for('make_team') }}"> add/change data </a> </p>  
+{% endblock %}
