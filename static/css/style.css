@@ -44,6 +44,10 @@ html, body {
     color: white;
 }
 
+form {
+    text-align: center;
+}
+
 th, td {
     border: 1px solid black;
 }
@@ -59,6 +63,14 @@ li {
     float: left;
   }
 
+#enter {
+    text-align: center;
+}
+
 .option {
     display: inline;
+}
+
+.moveForward {
+    text-align: center;
 }

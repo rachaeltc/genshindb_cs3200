@@ -38,7 +38,7 @@
     {% for weap in weapons %}
     <option value="{{weap}}"> {{weap}} </option>
     {% endfor %}
-    </select>
+    </select><br>
     <label for="refinementlvl">Enter weapon refinement:</label>
     <select name="refinementlvl">
         <option value=1> 1 </option>
@@ -113,6 +113,6 @@
 {% block finish %}
 {% if proceed %}
     <h3> move on to character data: </h3>
-    <p> <a class="btn" href="{{ url_for('enter_characters') }}"> Click here </a> </p>  
+    <p> <a class="btn moveForward" href="{{ url_for('enter_characters') }}"> Click here </a> </p>  
 {% endif %} 
 {% endblock %}
