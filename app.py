@@ -294,11 +294,112 @@ def enter_characters():
         return render_template("character.html", 
                 characters = gs_characternames, weaps = output4, output = output3, mode = "add", proceed = cont, err='')
 
-@app.route("/teams")
+@app.route("/teams", methods=['POST', 'GET'])
 def enter_teams():
     if "user" not in session:
         return redirect(url_for("index"))
-    return render_template("team.html")
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+    # get user character names
+    cur = connection.cursor()
+    cur.execute("SELECT character_name FROM user_character")
+    output = cur.fetchall()
+    user_characternames = []
+    for row in output:
+        user_characternames.append(row["character_name"])
+    cur.close()
+
+    # get user team view so far
+    cur = connection.cursor()
+    cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
+    output7 = cur.fetchall()
+    cur.close()
+
+    cont = False # to display deletion ability or not
+    if len(output7) > 0:
+        cont = True 
+ 
+    if request.method == "POST":
+        # navbar handling
+        if request.form["button_id"] == "add": # add selected from navbar
+            connection.close()
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='')
+        elif request.form["button_id"] == "del": # delete selected from navbar
+            connection.close()
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "del", proceed = cont, err='')
+         # user data input
+        if request.form["button_id"] == "add user team" :
+            # check if team has duplicate members
+            cur = connection.cursor()
+            valid = "SELECT valid_team('" + request.form["character1"] + "', '" + request.form["character2"] + "', '" + request.form["character3"] + "', '" + request.form["character4"] + "')"
+            cur.execute(valid)
+            valid_output = cur.fetchall()
+            cur.close()
+            valid_list = ''
+            for row in valid_output:
+                valid_list= list(row.values())
+            ans = int.from_bytes(valid_list[0], 'little') # 0: false, 1: true 
+            cur = connection.cursor()
+            if ans == 0:
+                connection.close()
+                return render_template("team.html", 
+                    u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='cannot have duplicate characters on one team')
+            else: # team is valid
+                cur.callproc("add_user_team", (request.form["team_name"], request.form["character1"], request.form["character2"], request.form["character3"], request.form["character4"],))    
+            # get updated user team table view
+            cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
+            output8 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output8) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output8, mode = "add", proceed = cont, err='')
+        elif request.form["button_id"] == "delete user team":
+            cur = connection.cursor()
+            cur.callproc("del_user_team", (request.form["teamid"],))
+            cur.execute("SELECT *, resonance_concat(team_id), team_atk(team_id) FROM user_team")
+            output8 = cur.fetchall()
+            connection.commit() 
+            cur.close()
+            connection.close()
+            if len(output8) > 0:
+                cont = True 
+            else:
+                cont = False
+            return render_template("team.html", 
+                u_characters = user_characternames, output = output8, mode = "del", proceed = cont, err='')
+    else:
+        connection.close()
+        return render_template("team.html", 
+                u_characters = user_characternames, output = output7, mode = "add", proceed = cont, err='')
+    
+@app.route("/my_data", methods=['POST', 'GET'])
+def my_data():
+    if "user" not in session:
+        return redirect(url_for("index"))
+    connection = pymysql.connect(host='localhost', user=session["user"], password=session["pw"],
+                db='genshin', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+    if request.method == "POST":
+        tbl = request.form["table"]
+        cur = connection.cursor()
+        query = "SELECT " + tbl 
+        cur.execute(query)
+        output1 = cur.fetchall()
+        cols = []
+        for row in output1[0]:
+            cols.append(row)
+        cur.close()
+        connection.close()
+        return render_template("mydata.html", output = output1, columns = cols)
+    else:
+        return render_template("mydata.html", output = '')
 
 
 if __name__ == "__main__":

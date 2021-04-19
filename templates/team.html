@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %} Enter Your Teams! {% endblock %}
+{% block logout %}
+<p> <a class="btn" href="{{ url_for('home') }}">Return home</a> </p> 
+<p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
+{% endblock %}
+
+{% block navbar %}
+<div class = "nav">
+<ul>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="add" />
+        <input type="submit" value="Add Your Teams"/>
+        </form>
+    </li>
+    <li class="option"> 
+        <form action="#" method ="post">
+        <input type="hidden" name="button_id" value="del" />
+        <input type="submit" value="Delete Your Teams"/>
+        </form>
+    </li>
+</ul>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if mode == "add" %}
+<form action="#" method ="post">
+    <label for="team_name">Enter a team name:</label>
+    <input type="text" name="team_name" />
+    <br />
+    <label for="character1"> Choose Character 1: </label>
+    <select name="character1">
+    {% for char in u_characters %}
+    <option value="{{char}}"> {{char}} </option>
+    {% endfor %}
+    </select>
+    <br />
+    <label for="character2"> Choose Character 2: </label>
+    <select name="character2">
+    {% for char in u_characters %}
+    <option value="{{char}}"> {{char}} </option>
+    {% endfor %}
+    </select>
+    <br />
+    <label for="character3"> Choose Character 3: </label>
+    <select name="character3">
+    {% for char in u_characters %}
+    <option value="{{char}}"> {{char}} </option>
+    {% endfor %}
+    </select>
+    <br />
+    <label for="character4"> Choose Character 4: </label>
+    <select name="character4">
+    {% for char in u_characters %}
+    <option value="{{char}}"> {{char}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="add user team" />
+    <input type="submit" value="Submit"/>
+</form>
+{% elif mode == "del" and proceed %}
+<form action="#" method ="post">
+    <label for="teamid">Select team to delete:</label>
+    <select name="teamid">
+    {% for row in output %}
+    <option value="{{ row['team_id']}}"> {{row['team_id']}} </option>
+    {% endfor %}
+    </select>
+    <input type="hidden" name="button_id" value="delete user team" />
+    <input type="submit" value="Submit"/>
+</form>
+
+{% elif mode == "del" and not proceed %}
+<p> no teams to delete </p>
+{% endif %} 
+{% endblock %}
+
+{% block output %}
+<p> {{ err }} </p>
+<table class = "output">
+    <tr>
+        <th> team_id </th>
+        <th> team_name </th>
+        <th> character1 </th>
+        <th> character2 </th>
+        <th> character3 </th>
+        <th> character4 </th>
+        <th> resonance_types </th>
+        <th> total_atk </th>
+    </tr>
+{% for row in output %}
+    <tr>
+    {% for col in row %}
+    <td> {{ row[col] }} </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block finish %}
+<h3> go back to character data: </h3>
+    <p> <a class="btn" href="{{ url_for('enter_characters') }}"> return to characters </a> </p>  
+
+{% if proceed %}
+    <h3> view all data: </h3>
+    <p> <a class="btn" href="{{ url_for('my_data') }}"> view all data </a> </p>  
+{% endif %} 
+{% endblock %}

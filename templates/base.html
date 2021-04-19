@@ -11,7 +11,9 @@
             <div class="header">
                 <img src="{{url_for('static', filename='logo.png')}}" align="middle">
                 <h1> Genshin Impact Project!</h1> 
-                {% block logout %} {% endblock %}
+                <div class="opts">
+                    {% block logout %} {% endblock %}
+                </div>
             </div> 
     
             <div class="pagecontent">

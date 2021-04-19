@@ -1,10 +1,26 @@
 {% extends "base.html" %}
 
 {% block logout %}
+<p> <a class="btn" href="{{ url_for('home') }}">Return home</a> </p> 
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
 
 {% block content %}
-<h3 id="enter"> First, enter your weapon data:</h3>
-<p> <a class="btn moveForward" href="{{ url_for('enter_weapons') }}"> Enter your weapon data</a> </p> 
+<h2> Instructions: </h2>
+<p> 1. Enter your weapon data: </p>
+<p> <a class="btn moveForward" href="{{ url_for('enter_weapons') }}"> weapon data</a> </p> 
+
+<p> 2. Enter your character data </p>
+<p> <a class="btn" href="{{ url_for('enter_characters') }}"> character data</a> </p> 
+
+<p> 3. Enter your team data </p>
+<p> <a class="btn" href="{{ url_for('enter_teams') }}"> team data</a> </p> 
+
+<p> 4. View your entered data </p>
+<p> <a class="btn" href="{{ url_for('my_data') }}"> view all data </a> </p>  
+
+<h2> Things to keep in mind:</h2>
+<p> 1. When a character is equipped with a weapon that is then deleted or modified, the character's weapon will be set to 'None' </p>
+<p> 2. When a characer is deleted, all teams that the character is in will also be deleted. </p>
+<p> 3. Teams must have 4 distinct characters </p>
 {% endblock %}
