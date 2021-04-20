@@ -35,6 +35,7 @@
 <form action="#" method ="post">
     <label for="character">Select character name:</label>
     <select name="character">
+    <option value="" disabled selected> Select character </option>
     {% for char in characters %}
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
@@ -132,15 +133,18 @@
 {% endif %} 
 {% endblock %}
 
-{% block output %}
+{% block error %}
 <p class="err"> {{ err }} </p>
+{% endblock %}
+
+{% block output %}
 <table class = "output">
     {% if proceed %}
     <tr>
         <th> character_name </th>
         <th> constellation_lvl </th>
         <th> talent_lvl </th>
-        <th> equipped_weapon </th>
+        <th> equipped_weapon_id </th>
     </tr>
     {% endif %}
 {% for row in output %}

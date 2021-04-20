@@ -85,8 +85,11 @@
 {% endif %} 
 {% endblock %}
 
-{% block output %}
+{% block error %}
 <p class="err"> {{ err }} </p>
+{% endblock %}
+
+{% block output %}
 <table class = "output">
     {% if proceed %}
     <tr>

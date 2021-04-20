@@ -76,7 +76,7 @@ def enter_weapons():
 
     # get user weapons so far
     cur = connection.cursor()
-    cur.execute("SELECT * FROM user_weapon")
+    cur.execute("SELECT weapon_id, weapon_name, refinement_lvl, weapon_type FROM user_weapon NATURAL JOIN gs_weapon")
     output4 = cur.fetchall()
     cur.close()
 
@@ -100,7 +100,7 @@ def enter_weapons():
         if request.form["button_id"] == "add user weapon":
             cur = connection.cursor()
             cur.callproc("add_user_weapon", (request.form["weapon"], request.form["refinementlvl"],))
-            cur.execute("SELECT * FROM user_weapon")
+            cur.execute("SELECT weapon_id, weapon_name, refinement_lvl, weapon_type FROM user_weapon NATURAL JOIN gs_weapon")
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
