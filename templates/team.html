@@ -27,15 +27,17 @@
 {% block content %}
 {% if mode == "add" %}
 <form action="#" method ="post">
+    <p>
     <label for="team_name">Enter a team name:</label>
     <input type="text" name="team_name" />
-    <br />
+    </p>
     <label for="character1"> Choose Character 1: </label>
     <select name="character1">
     {% for char in u_characters %}
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
     </select>
+    <br />
     <br />
     <label for="character2"> Choose Character 2: </label>
     <select name="character2">
@@ -44,12 +46,14 @@
     {% endfor %}
     </select>
     <br />
+    <br />
     <label for="character3"> Choose Character 3: </label>
     <select name="character3">
     {% for char in u_characters %}
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
     </select>
+    <br />
     <br />
     <label for="character4"> Choose Character 4: </label>
     <select name="character4">

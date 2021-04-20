@@ -40,6 +40,7 @@
     {% endfor %}
     </select>
     <br />
+    <br />
     <label for="constellationlvl">Enter character constellation level:</label>
     <select name="constellationlvl">
         <option value=1> 1 </option>
@@ -50,12 +51,14 @@
         <option value=6> 6 </option>
     </select>
     <br />
+    <br />
     <label for="talentlvl">Enter character talent level:</label>
     <select name="talentlvl">
         {% for x in range(15) %}
         <option value="{{x+1}}"> {{x+1}} </option>
         {% endfor %}
     </select>
+    <br />
     <br />
     <label for="equipped">Enter character's weapon:</label>
     <select name="equipped">
