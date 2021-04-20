@@ -1,11 +1,17 @@
 html, body {
     height: 100%;
     width: 100%;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 .pagecontainer{
     position: relative;
     min-height: 100vh;
+}
+
+.opts {
+    display:flex;
+    justify-content: center;
 }
 
 .header {
@@ -16,13 +22,10 @@ html, body {
     border: 0px;
 }
 
-.opts {
-    display: flex;
-}
-
 .pagecontent{
     margin-top: 10px;
-    padding-bottom: 20rem; 
+    padding-bottom: 20rem;
+    text-align: center;
 }
 
 .containerL {
@@ -36,6 +39,13 @@ html, body {
 .containerR {
     position: absolute;
     text-align: center;
+    right: 0%;
+    width: 50%;
+    padding: 10px;
+ }
+
+ .containerRList {
+    position: absolute;
     right: 0%;
     width: 50%;
     padding: 10px;
@@ -68,16 +78,18 @@ ul {
 
 li {
     float: left;
-  }
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
 
 #enter {
     text-align: center;
 }
 
-.option {
-    display: inline;
-}
-
-.moveForward {
-    text-align: center;
+.nav {
+    display: flex;
+    justify-content: center;
 }
