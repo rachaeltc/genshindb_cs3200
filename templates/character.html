@@ -145,10 +145,10 @@
 
 {% block finish %}
 <h3> go back to weapon data: </h3>
-    <p> <a class="btn" href="{{ url_for('enter_weapons') }}"> return to weapons </a> </p>  
+    <p> <a class="btn moveForward" href="{{ url_for('enter_weapons') }}"> return to weapons </a> </p>  
 
 {% if proceed %}
     <h3> move on to team data: </h3>
-    <p> <a class="btn" href="{{ url_for('enter_teams') }}"> enter teams </a> </p>  
+    <p> <a class="btn moveForward" href="{{ url_for('enter_teams') }}"> enter teams </a> </p>
 {% endif %} 
 {% endblock %}
