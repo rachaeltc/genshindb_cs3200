@@ -11,19 +11,19 @@
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="add" />
-        <input type="submit" value="Add Your Characters"/>
+        <input type="submit" value="Add Your Characters" class="amd"/>
         </form>
     </li>
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="mod" />
-        <input type="submit" value="Modify Your Characters"/>
+        <input type="submit" value="Modify Your Characters" class="amd"/>
         </form>
     </li>
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="del" />
-        <input type="submit" value="Delete Your Characters"/>
+        <input type="submit" value="Delete Your Characters" class="amd"/>
         </form>
     </li>
 </ul>
@@ -69,7 +69,7 @@
     </select>
     <br /><br />
     <input type="hidden" name="button_id" value="add user character" />
-    <input type="submit" value="Add Character"/>
+    <input type="submit" value="Add Character" class="sub"/>
 </form>
 {% elif mode == "mod" and proceed %}
 <form action="#" method ="post">
@@ -109,7 +109,7 @@
     </select>
     <br /><br />
     <input type="hidden" name="button_id" value="modify user character" />
-    <input type="submit" value="Modify Character"/>
+    <input type="submit" value="Modify Character" class="sub"/>
 </form>
 
 {% elif mode == "del" and proceed %}
@@ -122,7 +122,7 @@
     </select>
     <br /><br />
     <input type="hidden" name="button_id" value="delete user character" />
-    <input type="submit" value="Delete Character"/>
+    <input type="submit" value="Delete Character" class="sub"/>
 </form>
 
 {% elif mode == "mod" and not proceed %}

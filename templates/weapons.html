@@ -12,19 +12,19 @@
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="add" />
-        <input type="submit" value="Add Your Weapons"/>
+        <input type="submit" value="Add Your Weapons" class="amd"/>
         </form>
     </li>
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="mod" />
-        <input type="submit" value="Modify Your Weapons"/>
+        <input type="submit" value="Modify Your Weapons" class="amd"/>
         </form>
     </li>
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="del" />
-        <input type="submit" value="Delete Your Weapons"/>
+        <input type="submit" value="Delete Your Weapons" class="amd"/>
         </form>
     </li>
 </ul>
@@ -51,7 +51,7 @@
     </select>
     <br /> <br />
     <input type="hidden" name="button_id" value="add user weapon" />
-    <input type="submit" value="Add Weapon"/>
+    <input type="submit" value="Add Weapon" class="sub"/>
 </form>
 {% elif mode == "mod" and proceed %}
 <form action="#" method ="post">
@@ -79,7 +79,7 @@
     </select>
     <br /><br />
     <input type="hidden" name="button_id" value="modify user weapon" />
-    <input type="submit" value="Modify Weapon"/>
+    <input type="submit" value="Modify Weapon" class="sub"/>
 </form>
 {% elif mode == "del" and proceed %}
 <form action="#" method ="post">
@@ -91,7 +91,7 @@
     </select>
     <br /><br />
     <input type="hidden" name="button_id" value="delete user weapon" />
-    <input type="submit" value="Delete Weapon"/>
+    <input type="submit" value="Delete Weapon" class="sub"/>
 </form>
 {% elif mode == "mod" and not proceed %}
 <p> no weapons to modify </p>

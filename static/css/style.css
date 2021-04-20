@@ -76,6 +76,33 @@ html, body {
     padding: 13px;
     text-decoration: none;
     color: white;
+    margin-left: 2px;
+}
+
+.amd {
+    background:#77a6f1;
+    padding: 9px;
+    text-decoration: none;
+    color: white;
+    border: none;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.amd:hover {
+    background-color: #628ccf;
+}
+
+.sub {
+    background:#7b97c5;
+    padding: 5px;
+    text-decoration: none;
+    color: white; 
+    border: none
+}
+
+.sub:hover {
+    background-color: #61789c;
 }
 
 form {
@@ -84,10 +111,6 @@ form {
 
 .btn:hover {
     background-color: #4371bb;
-  }
-
-th, td {
-    border: 1px solid black;
 }
   
 ul {
@@ -102,8 +125,28 @@ li {
 }
 
 table {
-    margin-left: auto;
-    margin-right: auto;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th{
+      background-color:#61789c;
+      color: white;
+}
+  
+tr:nth-child(even) {
+    background-color: #dbe8f5;
+}
+
+.out{
+    display: flex;
+    justify-content: center;
 }
 
 #enter {

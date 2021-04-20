@@ -11,13 +11,13 @@
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="add" />
-        <input type="submit" value="Add Your Teams"/>
+        <input type="submit" value="Add Your Teams" class="amd"/>
         </form>
     </li>
     <li class="option"> 
         <form action="#" method ="post">
         <input type="hidden" name="button_id" value="del" />
-        <input type="submit" value="Delete Your Teams"/>
+        <input type="submit" value="Delete Your Teams" class="amd"/>
         </form>
     </li>
 </ul>
@@ -64,7 +64,7 @@
     <br />
     <br />
     <input type="hidden" name="button_id" value="add user team" />
-    <input type="submit" value="Add Team"/>
+    <input type="submit" value="Add Team" class="sub"/>
 </form>
 {% elif mode == "del" and proceed %}
 <form action="#" method ="post">
@@ -77,7 +77,7 @@
     <br />
     <br />
     <input type="hidden" name="button_id" value="delete user team" />
-    <input type="submit" value="Delete Team"/>
+    <input type="submit" value="Delete Team" class="sub"/>
 </form>
 
 {% elif mode == "del" and not proceed %}
