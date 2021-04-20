@@ -393,13 +393,17 @@ def my_data():
         cur.execute(query)
         output1 = cur.fetchall()
         cols = []
-        for row in output1[0]:
-            cols.append(row)
+        ct = False
+        if len(output1) > 0: # if there is data to be displayed
+            ct = True
+            for row in output1[0]:
+                cols.append(row)
         cur.close()
         connection.close()
-        return render_template("mydata.html", output = output1, columns = cols)
+
+        return render_template("mydata.html", output = output1, show = True, columns = cols, hasContent=ct)
     else:
-        return render_template("mydata.html", output = '')
+        return render_template("mydata.html", output = '', show = False)
 
 
 if __name__ == "__main__":

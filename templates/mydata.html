@@ -19,6 +19,7 @@
 {% endblock %}
 
 {% block output %}
+{% if hasContent%}
 <table class="dataoutput">
     <tr>
         {% for i in columns %}
@@ -33,6 +34,9 @@
     </tr>
 {% endfor %}
 </table>
+{% elif show %}
+<p class="err"> No data has been entered yet </p>
+{% endif %}
 {% endblock %}
 
 {% block finish %}
