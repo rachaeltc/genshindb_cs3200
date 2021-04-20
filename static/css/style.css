@@ -66,6 +66,11 @@ html, body {
     padding-bottom: 25px;
  }
 
+
+ .err {
+     color: rgb(226, 68, 68);
+ }
+
 .btn {
     background:#95b7ed;
     padding: 13px;
@@ -76,6 +81,7 @@ html, body {
 form {
     text-align: center;
 }
+
 .btn:hover {
     background-color: #4371bb;
   }

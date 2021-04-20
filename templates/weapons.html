@@ -2,7 +2,7 @@
 {% block title %} Enter Your Data! {% endblock %}
 
 {% block logout %}
-<p> <a class="btn" href="{{ url_for('home') }}">Return home</a> </p> 
+<p> <a class="btn" href="{{ url_for('home') }}">Home</a> </p> 
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
 
@@ -39,7 +39,8 @@
     {% for weap in weapons %}
     <option value="{{weap}}"> {{weap}} </option>
     {% endfor %}
-    </select><br>
+    </select>
+    <br /> <br />
     <label for="refinementlvl">Enter weapon refinement:</label>
     <select name="refinementlvl">
         <option value=1> 1 </option>
@@ -48,8 +49,9 @@
         <option value=4> 4 </option>
         <option value=5> 5 </option>
     </select>
+    <br /> <br />
     <input type="hidden" name="button_id" value="add user weapon" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Add Weapon"/>
 </form>
 {% elif mode == "mod" and proceed %}
 <form action="#" method ="post">
@@ -59,12 +61,14 @@
     <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
     {% endfor %}
     </select>
+    <br /><br />
     <label for="weapon">Select weapon name:</label>
     <select name="weapon">
     {% for weap in weapons %}
     <option value="{{weap}}"> {{weap}} </option>
     {% endfor %}
     </select>
+    <br /><br />
     <label for="refinementlvl">Enter weapon refinement:</label>
     <select name="refinementlvl">
         <option value=1> 1 </option>
@@ -73,8 +77,9 @@
         <option value=4> 4 </option>
         <option value=5> 5 </option>
     </select>
+    <br /><br />
     <input type="hidden" name="button_id" value="modify user weapon" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Modify Weapon"/>
 </form>
 {% elif mode == "del" and proceed %}
 <form action="#" method ="post">
@@ -84,8 +89,9 @@
     <option value="{{ row['weapon_id']}}"> {{ row['weapon_id']}} </option>
     {% endfor %}
     </select>
+    <br /><br />
     <input type="hidden" name="button_id" value="delete user weapon" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Delete Weapon"/>
 </form>
 {% elif mode == "mod" and not proceed %}
 <p> no weapons to modify </p>
@@ -96,11 +102,13 @@
 
 {% block output %}
 <table class = "output">
+    {% if proceed %}
     <tr>
         <th> id </th>
         <th> weapon_name </th>
         <th> refinement_lvl</th>
     </tr>
+    {% endif %}
 {% for row in output %}
     <tr>
     {% for col in row %}

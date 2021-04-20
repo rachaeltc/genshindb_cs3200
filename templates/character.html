@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Enter Your Characters! {% endblock %}
 {% block logout %}
-<p> <a class="btn" href="{{ url_for('home') }}">Return home</a> </p> 
+<p> <a class="btn" href="{{ url_for('home') }}">Home</a> </p> 
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
 
@@ -67,8 +67,9 @@
         <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
         {% endfor %}
     </select>
+    <br /><br />
     <input type="hidden" name="button_id" value="add user character" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Add Character"/>
 </form>
 {% elif mode == "mod" and proceed %}
 <form action="#" method ="post">
@@ -78,6 +79,7 @@
         <option value="{{ row['character_name']}}"> {{row['character_name']}} </option>
         {% endfor %}
     </select>
+    <br />
     <br />
     <label for="constellationlvl">Enter character constellation level:</label>
     <select name="constellationlvl">
@@ -89,12 +91,14 @@
         <option value=6> 6 </option>
     </select>
     <br />
+    <br />
     <label for="talentlvl">Enter character talent level:</label>
     <select name="talentlvl">
         {% for x in range(15) %}
         <option value="{{x+1}}"> {{x+1}} </option>
         {% endfor %}
     </select>
+    <br />
     <br />
     <label for="equipped">Enter character's weapon:</label>
     <select name="equipped">
@@ -103,9 +107,9 @@
         <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
         {% endfor %}
     </select>
-    <br />
+    <br /><br />
     <input type="hidden" name="button_id" value="modify user character" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Modify Character"/>
 </form>
 
 {% elif mode == "del" and proceed %}
@@ -116,8 +120,9 @@
     <option value="{{ row['character_name']}}"> {{row['character_name']}} </option>
     {% endfor %}
     </select>
+    <br /><br />
     <input type="hidden" name="button_id" value="delete user character" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Delete Character"/>
 </form>
 
 {% elif mode == "mod" and not proceed %}
@@ -128,14 +133,16 @@
 {% endblock %}
 
 {% block output %}
-<p> {{ err }} </p>
+<p class="err"> {{ err }} </p>
 <table class = "output">
+    {% if proceed %}
     <tr>
         <th> character_name </th>
         <th> constellation_lvl </th>
         <th> talent_lvl </th>
         <th> equipped_weapon </th>
     </tr>
+    {% endif %}
 {% for row in output %}
     <tr>
     {% for col in row %}

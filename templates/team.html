@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Enter Your Teams! {% endblock %}
 {% block logout %}
-<p> <a class="btn" href="{{ url_for('home') }}">Return home</a> </p> 
+<p> <a class="btn" href="{{ url_for('home') }}">Home</a> </p> 
 <p> <a class="btn" href="{{ url_for('logout') }}">Logout</a> </p> 
 {% endblock %}
 
@@ -61,8 +61,10 @@
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
     </select>
+    <br />
+    <br />
     <input type="hidden" name="button_id" value="add user team" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Add Team"/>
 </form>
 {% elif mode == "del" and proceed %}
 <form action="#" method ="post">
@@ -72,8 +74,10 @@
     <option value="{{ row['team_id']}}"> {{row['team_id']}} </option>
     {% endfor %}
     </select>
+    <br />
+    <br />
     <input type="hidden" name="button_id" value="delete user team" />
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Delete Team"/>
 </form>
 
 {% elif mode == "del" and not proceed %}
@@ -82,8 +86,9 @@
 {% endblock %}
 
 {% block output %}
-<p> {{ err }} </p>
+<p class="err"> {{ err }} </p>
 <table class = "output">
+    {% if proceed %}
     <tr>
         <th> team_id </th>
         <th> team_name </th>
@@ -94,6 +99,7 @@
         <th> resonance_types </th>
         <th> total_atk </th>
     </tr>
+    {% endif %}
 {% for row in output %}
     <tr>
     {% for col in row %}

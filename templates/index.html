@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<p>Please log in with your mySQL credentials.</p><br>
+<p>Please log in with your mySQL credentials:</p><br>
 <form action="#" method ="post">
     <label for="user">username: </label>
     <input type="text" name="user" />
-    <br />
+    <br /> <br />
     <label for="pw">password: </label>
-    <input type="text" name="pw" /><br>
+    <input type="text" name="pw" /><br /> <br />
     <input type="submit" value="Submit"/>
 </form>
 {% endblock %}
 {% block output %}
-<p> {{ error }}  </p>
+<p class="err"> {{ error }}  </p>
 {% endblock %}
