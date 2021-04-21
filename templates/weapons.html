@@ -36,7 +36,6 @@
 <form action="#" method ="post">
     <label for="weapon">Select weapon name:</label>
     <select name="weapon">
-    <option value="" disabled selected> Select character </option>
     {% for weap in weapons %}
     <option value="{{weap}}"> {{weap}} </option>
     {% endfor %}
