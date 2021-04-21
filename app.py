@@ -114,7 +114,7 @@ def enter_weapons():
         elif request.form["button_id"] == "modify user weapon":
             cur = connection.cursor()
             cur.callproc("mod_user_weapon", (request.form["weaponid"], request.form["weapon"], request.form["refinementlvl"],))
-            cur.execute("SELECT * FROM user_weapon")
+            cur.execute("SELECT weapon_id, weapon_name, refinement_lvl, weapon_type FROM user_weapon NATURAL JOIN gs_weapon")
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
@@ -128,7 +128,7 @@ def enter_weapons():
         elif request.form["button_id"] == "delete user weapon":
             cur = connection.cursor()
             cur.callproc("del_user_weapon", (request.form["weaponid"],))
-            cur.execute("SELECT * FROM user_weapon")
+            cur.execute("SELECT weapon_id, weapon_name, refinement_lvl, weapon_type FROM user_weapon NATURAL JOIN gs_weapon")
             output5 = cur.fetchall()
             connection.commit() 
             cur.close()
