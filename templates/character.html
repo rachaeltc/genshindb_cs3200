@@ -35,7 +35,6 @@
 <form action="#" method ="post">
     <label for="character">Select character name:</label>
     <select name="character">
-    <option value="" disabled selected> Select character </option>
     {% for char in characters %}
     <option value="{{char}}"> {{char}} </option>
     {% endfor %}
@@ -63,7 +62,6 @@
     <br />
     <label for="equipped">Enter character's weapon:</label>
     <select name="equipped">
-        <option value="" disabled selected> WeaponName, Level </option>
         <option value=-1> None </option>
         {% for row in weaps %}
         <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
@@ -104,7 +102,6 @@
     <br />
     <label for="equipped">Enter character's weapon:</label>
     <select name="equipped">
-        <option value="" disabled selected> WeaponName, Level </option>
         <option value=-1> None </option>
         {% for row in weaps %}
         <option value="{{ row['weapon_id']}}"> {{ row['weapon_name']}}, {{ row['refinement_lvl']}} </option>
