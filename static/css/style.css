@@ -54,6 +54,20 @@ html, body {
     padding-bottom: 25px;
  }
 
+ .containerLn {
+    text-align: center;
+    position: absolute;
+    left: 0%;
+    width: 45%;
+ }
+
+ .containerRn {
+    position: absolute;
+    text-align: center;
+    right: 0%;
+    width: 45%;
+ }
+
  .containerRList {
     position: absolute;
     right: 0%;
